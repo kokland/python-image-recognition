@@ -1,4 +1,5 @@
 import cv2
+import time
 
 def draw_caption(frame, text):
     font = cv2.FONT_HERSHEY_SIMPLEX
@@ -18,3 +19,8 @@ def draw_fps(frame, fps):
     color = (255, 0, 0)
     fps_text = f"FPS: {fps:.2f}"
     cv2.putText(frame, fps_text, (10, 30), font, font_scale, color, thickness, cv2.LINE_AA)
+
+def calculate_fps(prev_time, new_time):
+    fps = 1 / (new_time - prev_time)
+    prev_time = new_time
+    return fps

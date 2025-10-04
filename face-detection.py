@@ -1,16 +1,5 @@
-# import cv2
-# import torch
-# from transformers import BlipProcessor, BlipForConditionalGeneration
-# from PIL import Image
-# import numpy as np
-# import time
-# from model_utils import load_processor, load_model, get_device, get_caption
-# from face_utils import load_face_cascade, draw_rectangle_on_faces
-# from display_utils import draw_caption, draw_fps
-# from camera_utils import set_camera_resolution
-
-from utils.camera_utils import set_camera_resolution
-from utils.display_utils import draw_caption, draw_fps
+from utils.camera_utils import set_camera_resolution, get_video_capture_device
+from utils.display_utils import draw_caption, draw_fps, calculate_fps
 from utils.face_utils import load_face_cascade, draw_rectangle_on_faces
 from utils.model_utils import load_processor, load_model, get_device, get_caption
 import cv2
@@ -22,9 +11,9 @@ def main():
     processor = load_processor()
     model = load_model(device)
     face_cascade = load_face_cascade()
-    cap = cv2.VideoCapture(0)
-
-    set_camera_resolution(cap, 1024, 768)
+    cap = get_video_capture_device(0)
+    
+    cap = set_camera_resolution(cap, 800, 480)
 
     prev_time = time.time()
     print("Press 'q' to quit.")
@@ -39,19 +28,19 @@ def main():
         description = get_caption(processor, model, device, frame)
 
         # Calculate FPS
-        curr_time = time.time()
-        fps = 1 / (curr_time - prev_time)
-        prev_time = curr_time
+        temp_time = time.time()
+        fps = calculate_fps(prev_time, temp_time)
+        prev_time = temp_time
 
         # Draw FPS and caption
         draw_fps(frame, fps)
         draw_caption(frame, description)
-
+        
         cv2.imshow('Real-Time Image Captioning', frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-
+  
     cap.release()
     cv2.destroyAllWindows()
 
