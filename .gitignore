@@ -1,0 +1,27 @@
+# Python bytecode files
+*.pyc
+__pycache__/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Editor/IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Sensitive information/local configuration
+.env
+*.log
+
+# Build artifacts and distribution
+dist/
+build/
+*.egg-info/
